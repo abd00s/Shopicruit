@@ -1,9 +1,9 @@
 require "HTTParty"
 
-class Api
+module Api
   include HTTParty
 
-  def get_products
+  def self.get_products
     response = HTTParty.get('http://shopicruit.myshopify.com/products.json')
     response["products"]
   end
