@@ -13,5 +13,4 @@ class Shopicruit
       desirable_variants << Variant.new(variant)
     end
   end
-  puts desirable_variants.count
 end
