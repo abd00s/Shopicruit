@@ -2,7 +2,7 @@ module Utility
   extend self
 
   def sum_of_all_desired_variants(arr)
-    arr.inject(:+)
+    arr.inject(1){ |sum, variant| sum + variant.grams }
   end
 
   def method_name(variants, limit)
