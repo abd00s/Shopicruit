@@ -18,8 +18,8 @@ module Utility
   def find_combinations(variants, limit)
     # Decrementing iterator
     variants.size.downto(1) do |i|
-      unless variants.combination(i).select {|a| a.reduce(:+) <= limit}.empty?
-        return variants.combination(i).select {|a| a.reduce(:+) <= limit}
+      unless variants.combination(i).select {|comb| weight_of_variants(comb) <= limit}.empty?
+        return variants.combination(i).select {|comb| weight_of_variants(comb) <= limit}
       end
     end
     return []
