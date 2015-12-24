@@ -8,10 +8,15 @@ module Utility
   def method_name(variants, limit)
     if weight_of_variants(variants) <= limit
       # buy all
+      message = "The total weight of all desired variants is under the weight limit
+      you may purchase all."
     elsif find_combinations(variants, limit).empty?
       # buy none
+      message = "All variants are too heavy, you can't purchase any."
     else
       # COMBS << find_combinations(variants, limit)
+      message = "This selection of variants is the most you can carry while
+      remaining under the limit"
     end
   end
 
