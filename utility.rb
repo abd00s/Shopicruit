@@ -16,12 +16,15 @@ module Utility
   end
 
   def find_combinations(variants, limit)
-    # Decrementing iterator
+    # Decrementing iterator; Start at combination size == number of possible variants
     variants.size.downto(1) do |i|
+      # Is there such a combination at this size? (i.e. satisfies weight limit)
       unless variants.combination(i).select {|comb| weight_of_variants(comb) <= limit}.empty?
         return variants.combination(i).select {|comb| weight_of_variants(comb) <= limit}
       end
     end
+    # Return an empty array if the limit cannot be satisfied
+    # i.e. lightest variant is heavier than the limit
     return []
   end
 end
