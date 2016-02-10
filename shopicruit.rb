@@ -7,7 +7,7 @@ class Shopicruit
   attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products
 
   def initialize
-    @limit = 100000000000
+    @limit = 100
     @desired_categories = ["Computer", "Keyboard"]
     @desirable_products = []
     @desirable_variants = []
@@ -34,6 +34,10 @@ class Shopicruit
     arr.inject(0){ |sum, variant| sum + variant.grams }
   end
 
+  def price_of_variants(arr)
+    arr.inject(0){ |sum, variant| sum + variant.price }
+  end
+
   def find_carriable_combo(variants, limit)
     if weight_of_variants(variants) <= limit
       # buy all
@@ -46,12 +50,20 @@ class Shopicruit
       update_products_to_purchase([], message)
     else
       # COMBS << find_combinations(variants, limit)
-      variants = find_combinations(variants, limit)
+      combinations = find_combinations(variants, limit)
+      # if there are >1 combs, select the cheaper one
+      variants = select_cheapest_combination(combinations)
       message = "This selection of variants is the most you can carry while
       remaining under the limit"
       update_products_to_purchase(variants, message)
-      # if there are 2 combs, select the cheaper one
     end
+  end
+
+  def select_cheapest_combination(combinations)
+    prices = combinations.each_with_index.map { |comb, index|  [price_of_variants(comb), index] }
+    cheapest_combo = prices.min
+    index = cheapest_combo[1]
+    combinations[index]
   end
 
   def update_products_to_purchase(products, message)
