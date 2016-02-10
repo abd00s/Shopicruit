@@ -4,10 +4,10 @@ require_relative "Variant"
 require_relative "Utility"
 
 class Shopicruit
-  attr_reader :desirable_variants, :limit, :products_to_purchase, :message
+  attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products
 
   def initialize
-    @limit = 100000
+    @limit = 100000000000
     @desired_categories = ["Computer", "Keyboard"]
     @desirable_products = []
     @desirable_variants = []
@@ -31,7 +31,7 @@ class Shopicruit
   end
 
   def weight_of_variants(arr)
-    arr.inject(1){ |sum, variant| sum + variant.grams }
+    arr.inject(0){ |sum, variant| sum + variant.grams }
   end
 
   def find_carriable_combo(variants, limit)
