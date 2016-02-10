@@ -7,7 +7,7 @@ class Shopicruit
   attr_reader :desirable_variants, :limit, :products_to_purchase, :message
 
   def initialize
-    @limit = 1000
+    @limit = 100000
     @desired_categories = ["Computer", "Keyboard"]
     @desirable_products = []
     @desirable_variants = []
@@ -43,10 +43,13 @@ class Shopicruit
     elsif find_combinations(variants, limit).empty?
       # buy none
       message = "All variants are too heavy, you can't purchase any."
+      update_products_to_purchase([], message)
     else
       # COMBS << find_combinations(variants, limit)
+      variants = find_combinations(variants, limit)
       message = "This selection of variants is the most you can carry while
       remaining under the limit"
+      update_products_to_purchase(variants, message)
       # if there are 2 combs, select the cheaper one
     end
   end
