@@ -5,7 +5,7 @@ module Utility
     arr.inject(1){ |sum, variant| sum + variant.grams }
   end
 
-  def method_name(variants, limit)
+  def find_carriable_combo(variants, limit)
     if weight_of_variants(variants) <= limit
       # buy all
       message = "The total weight of all desired variants is under the weight limit

@@ -4,6 +4,7 @@ require_relative "Variant"
 require_relative "Utility"
 
 class Shopicruit
+  attr_reader :desirable_variants, :limit
   extend Utility
 
   def initialize
@@ -30,5 +31,13 @@ class Shopicruit
     end
   end
 
+  def self.run
+    shopicruit = Shopicruit.new
+    shopicruit.filter_products
+    shopicruit.find_all_desirable_variants
+    find_carriable_combo(shopicruit.desirable_variants, shopicruit.limit)
+  end
+
 end
 
+Shopicruit.run
