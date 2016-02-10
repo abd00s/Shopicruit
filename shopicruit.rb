@@ -4,10 +4,10 @@ require_relative "Variant"
 require_relative "Utility"
 
 class Shopicruit
-  attr_reader :desirable_variants, :limit, :products_to_purchase
+  attr_reader :desirable_variants, :limit, :products_to_purchase, :message
 
   def initialize
-    @limit = 1000000
+    @limit = 1000
     @desired_categories = ["Computer", "Keyboard"]
     @desirable_products = []
     @desirable_variants = []
@@ -37,9 +37,9 @@ class Shopicruit
   def find_carriable_combo(variants, limit)
     if weight_of_variants(variants) <= limit
       # buy all
-      @products_to_purchase << "SSSSS"
       message = "The total weight of all desired variants is under the weight limit
       you may purchase all."
+      update_products_to_purchase(variants, message)
     elsif find_combinations(variants, limit).empty?
       # buy none
       message = "All variants are too heavy, you can't purchase any."
@@ -49,6 +49,11 @@ class Shopicruit
       remaining under the limit"
       # if there are 2 combs, select the cheaper one
     end
+  end
+
+  def update_products_to_purchase(products, message)
+    @products_to_purchase = products
+    @message = message
   end
 
   def find_combinations(variants, limit)
