@@ -1,8 +1,10 @@
 require_relative "Api"
 require_relative "Product"
 require_relative "Variant"
+require_relative "Utility"
 
 class Shopicruit
+  extend Utility
   all_products = Api::get_products
   desirable_products = all_products.select { |product| ["Computer", "Keyboard"]
     .include?(product["product_type"]) }

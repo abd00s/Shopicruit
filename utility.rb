@@ -17,6 +17,7 @@ module Utility
       # COMBS << find_combinations(variants, limit)
       message = "This selection of variants is the most you can carry while
       remaining under the limit"
+      # if there are 2 combs, select the cheaper one
     end
   end
 
