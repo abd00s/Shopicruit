@@ -30,7 +30,7 @@ class Shopicruit
   end
 
   def weight_of_variants(variants)
-    variants.inject(0){ |sum, variant| sum + variant.grams }
+    variants.inject(0){ |sum, variant| sum + variant.grams.to_f/1000 }
   end
 
   def price_of_variants(variants)
