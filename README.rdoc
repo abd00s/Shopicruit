@@ -1,0 +1,3 @@
+Shopicruit
+
+Submission for Shopify's Summer Internship application code challenge.
