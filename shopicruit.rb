@@ -7,7 +7,7 @@ class Shopicruit
   attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products
 
   def initialize
-    @limit = 10
+    @limit = 100000
     @desired_categories = ["Computer", "Keyboard"]
     @desirable_products = []
     @desirable_variants = []
@@ -25,7 +25,7 @@ class Shopicruit
   def find_all_desirable_variants
     @desirable_products.each do |product|
       product.variants.each do |variant|
-        @desirable_variants << Variant.new(variant)
+        @desirable_variants << Variant.new(variant, product)
       end
     end
   end
@@ -58,7 +58,9 @@ class Shopicruit
   end
 
   def select_cheapest_combination(combinations)
-    prices = combinations.each_with_index.map { |comb, index|  [price_of_variants(comb), index] }
+    prices = combinations.each_with_index.map do |comb, index|
+      [price_of_variants(comb), index]
+    end
     cheapest_combo = prices.min
     index = cheapest_combo[1]
     combinations[index]
@@ -88,7 +90,10 @@ class Shopicruit
     shopicruit.find_all_desirable_variants
     shopicruit.find_carriable_combo(shopicruit.desirable_variants, shopicruit.limit)
     puts shopicruit.message
-    shopicruit.products_to_purchase.each {|product| puts "\t\t#{product.title}"}
+    shopicruit.products_to_purchase.each do |product|
+      puts "\t#{product.parent.title}"
+      puts "\t\t#{product.title}"
+    end
     puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase)).to_f/1000} KGs"
     puts "Costing you $#{shopicruit.price_of_variants(shopicruit.products_to_purchase)}"
   end
