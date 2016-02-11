@@ -6,7 +6,7 @@ class Shopicruit
   attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products
 
   def initialize
-    @limit = 500000
+    @limit = 100000
     @desired_categories = ["Computer", "Keyboard"]
     @desirable_products = []
     @desirable_variants = []
@@ -30,7 +30,7 @@ class Shopicruit
   end
 
   def weight_of_variants(variants)
-    variants.inject(0){ |sum, variant| sum + variant.grams.to_f/1000 }
+    variants.inject(0){ |sum, variant| sum + variant.grams }
   end
 
   def price_of_variants(variants)

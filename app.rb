@@ -11,7 +11,7 @@ class App
       puts "\t#{product.parent.title}"
       puts "\t\t#{product.title}"
     end
-    puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase))} KGs"
+    puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase)).to_f/1000} KGs"
     puts "Costing you $#{shopicruit.price_of_variants(shopicruit.products_to_purchase)}"
   end
 end
