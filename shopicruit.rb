@@ -6,7 +6,7 @@ class Shopicruit
   attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products
 
   def initialize
-    @limit = 100000
+    @limit = 500000
     @desired_categories = ["Computer", "Keyboard"]
     @desirable_products = []
     @desirable_variants = []
@@ -29,12 +29,12 @@ class Shopicruit
     end
   end
 
-  def weight_of_variants(arr)
-    arr.inject(0){ |sum, variant| sum + variant.grams }
+  def weight_of_variants(variants)
+    variants.inject(0){ |sum, variant| sum + variant.grams }
   end
 
-  def price_of_variants(arr)
-    arr.inject(0){ |sum, variant| sum + variant.price }
+  def price_of_variants(variants)
+    variants.inject(0){ |sum, variant| sum + variant.price }
   end
 
   def find_carriable_combo(variants, limit)
@@ -47,7 +47,7 @@ class Shopicruit
       message = "All variants are too heavy, you can't purchase any."
       update_products_to_purchase([], message)
     else
-      # COMBS << find_combinations(variants, limit)
+      # buy combination that maximizes weight and minimizes price
       combinations = find_combinations(variants, limit)
       # if there are >1 combs, select the cheaper one
       variants = select_cheapest_combination(combinations)
@@ -72,15 +72,22 @@ class Shopicruit
 
   def find_combinations(variants, limit)
     # Decrementing iterator; Start at combination size == number of possible variants
+    # so that we purchase them all if their total weight is less than our limit
     variants.size.downto(1) do |i|
-      # Is there such a combination at this size? (i.e. satisfies weight limit)
-      unless variants.combination(i).select {|comb| weight_of_variants(comb) <= limit}.empty?
-        return variants.combination(i).select {|comb| weight_of_variants(comb) <= limit}
+      # Is there a combination at this size that satisfies our weight limit?
+      unless acceptable_combinations_of_size_i(variants, i, limit).empty?
+        return acceptable_combinations_of_size_i(variants, i, limit)
       end
     end
     # Return an empty array if the limit cannot be satisfied
     # i.e. lightest variant is heavier than the limit
     return []
+  end
+
+  def acceptable_combinations_of_size_i(items, i, limit)
+    # Finds all possible combinations (subsets) of size i (without repeating);
+    # then selects only ones that satisfy the weight limit.
+    items.combination(i).select {|comb| weight_of_variants(comb) <= limit}
   end
 
 end
