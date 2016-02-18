@@ -5,9 +5,9 @@ require_relative "Variant"
 class Shopicruit
   attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products
 
-  def initialize
-    @limit = 100000
-    @desired_categories = ["Computer", "Keyboard"]
+  def initialize(limit, desired_categories)
+    @limit = limit
+    @desired_categories = desired_categories
     @desirable_products = []
     @desirable_variants = []
     @products_to_purchase = []
@@ -90,8 +90,8 @@ class Shopicruit
     items.combination(i).select {|comb| weight_of_variants(comb) <= limit}
   end
 
-  def self.run
-    shopicruit = Shopicruit.new
+  def self.run(limit, desired_categories)
+    shopicruit = Shopicruit.new(limit, desired_categories)
     shopicruit.filter_products
     shopicruit.find_all_desirable_variants
     shopicruit.find_carriable_combo(shopicruit.desirable_variants, shopicruit.limit)
@@ -106,4 +106,4 @@ class Shopicruit
 
 end
 
-Shopicruit.run
+Shopicruit.run(100000, ["Computer", "Keyboard"])
