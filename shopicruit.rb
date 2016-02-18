@@ -14,6 +14,22 @@ class Shopicruit
     @message = []
   end
 
+  def self.run(args={})
+    limit = args[:limit] || 100000
+    desired_categories = args[:desired_categories] || ["Computer", "Keyboard"]
+    shopicruit = Shopicruit.new(limit, desired_categories)
+    shopicruit.filter_products
+    shopicruit.find_all_desirable_variants
+    shopicruit.find_carriable_combo(shopicruit.desirable_variants, shopicruit.limit)
+    puts shopicruit.message
+    shopicruit.products_to_purchase.each do |product|
+      puts "\t#{product.parent.title}"
+      puts "\t\t#{product.title}"
+    end
+    puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase)).to_f/1000} KGs"
+    puts "Costing you $#{shopicruit.price_of_variants(shopicruit.products_to_purchase)}"
+  end
+
   def filter_products
     all_products = Api::get_products
     @desirable_products = all_products.select { |product| @desired_categories
@@ -88,22 +104,6 @@ class Shopicruit
     # Finds all possible combinations (subsets) of size i (without repeating);
     # then selects only ones that satisfy the weight limit.
     items.combination(i).select {|comb| weight_of_variants(comb) <= limit}
-  end
-
-  def self.run(args={})
-    limit = args[:limit] || 100000
-    desired_categories = args[:desired_categories] || ["Computer", "Keyboard"]
-    shopicruit = Shopicruit.new(limit, desired_categories)
-    shopicruit.filter_products
-    shopicruit.find_all_desirable_variants
-    shopicruit.find_carriable_combo(shopicruit.desirable_variants, shopicruit.limit)
-    puts shopicruit.message
-    shopicruit.products_to_purchase.each do |product|
-      puts "\t#{product.parent.title}"
-      puts "\t\t#{product.title}"
-    end
-    puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase)).to_f/1000} KGs"
-    puts "Costing you $#{shopicruit.price_of_variants(shopicruit.products_to_purchase)}"
   end
 
 end
