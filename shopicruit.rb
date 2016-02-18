@@ -79,7 +79,7 @@ class Shopicruit
     # so that we purchase them all if their total weight is less than our limit
     variants.size.downto(1) do |i|
       # Is there a combination at this size that satisfies our weight limit?
-      unless acceptable_combinations_of_size_i(variants, i, limit).empty?
+      if acceptable_combinations_of_size_i(variants, i, limit).size > 0
         return acceptable_combinations_of_size_i(variants, i, limit)
       end
     end
