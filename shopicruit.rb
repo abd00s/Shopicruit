@@ -51,14 +51,6 @@ class Shopicruit
     end
   end
 
-  def weight_of_variants(variants)
-    variants.inject(0){ |sum, variant| sum + variant.grams }
-  end
-
-  def price_of_variants(variants)
-    variants.inject(0){ |sum, variant| sum + variant.price }
-  end
-
   def find_carriable_combo(variants, limit)
     if weight_of_variants(variants) <= limit
       # buy all
@@ -78,18 +70,8 @@ class Shopicruit
     end
   end
 
-  def select_cheapest_combination(combinations)
-    prices = combinations.each_with_index.map do |comb, index|
-      [price_of_variants(comb), index]
-    end
-    cheapest_combo = prices.min
-    index = cheapest_combo[1]
-    combinations[index]
-  end
-
-  def update_products_to_purchase(products, message)
-    @products_to_purchase = products
-    @message = message
+  def weight_of_variants(variants)
+    variants.inject(0){ |sum, variant| sum + variant.grams }
   end
 
   def find_combinations(variants, limit)
@@ -110,6 +92,24 @@ class Shopicruit
     # Finds all possible combinations (subsets) of size i (without repeating);
     # then selects only ones that satisfy the weight limit.
     items.combination(i).select {|comb| weight_of_variants(comb) <= limit}
+  end
+
+  def select_cheapest_combination(combinations)
+    prices = combinations.each_with_index.map do |comb, index|
+      [price_of_variants(comb), index]
+    end
+    cheapest_combo = prices.min
+    index = cheapest_combo[1]
+    combinations[index]
+  end
+
+  def update_products_to_purchase(products, message)
+    @products_to_purchase = products
+    @message = message
+  end
+
+  def price_of_variants(variants)
+    variants.inject(0){ |sum, variant| sum + variant.price }
   end
 
 end
