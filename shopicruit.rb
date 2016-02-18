@@ -15,7 +15,7 @@ class Shopicruit
   end
 
   def self.run(args={})
-    limit = args[:limit] || 100000
+    limit = args[:limit] || 100
     desired_categories = args[:desired_categories] || ["Computer", "Keyboard"]
     shopicruit = Shopicruit.new(limit, desired_categories)
     shopicruit.filter_products
@@ -26,7 +26,7 @@ class Shopicruit
       puts "\t#{product.parent.title}"
       puts "\t\t#{product.title}"
     end
-    puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase)).to_f/1000} KGs"
+    puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase))} KGs"
     puts "Costing you $#{shopicruit.price_of_variants(shopicruit.products_to_purchase)}"
   end
 
@@ -108,4 +108,4 @@ class Shopicruit
 
 end
 
-Shopicruit.run(limit: 100000, desired_categories: ["Computer", "Keyboard"])
+Shopicruit.run(limit: 100, desired_categories: ["Computer", "Keyboard"])
