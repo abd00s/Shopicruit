@@ -3,7 +3,7 @@ require_relative "Product"
 require_relative "Variant"
 
 class Shopicruit
-  attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products
+  attr_reader :desirable_variants, :limit, :products_to_purchase, :message, :desirable_products, :desired_categories
 
   def initialize(limit, desired_categories)
     @limit = limit
