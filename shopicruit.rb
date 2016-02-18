@@ -20,7 +20,7 @@ class Shopicruit
     shopicruit = Shopicruit.new(limit, desired_categories)
     shopicruit.filter_products
     shopicruit.find_all_desirable_variants
-    shopicruit.find_carriable_combo(shopicruit.desirable_variants, shopicruit.limit)
+    shopicruit.find_carriable_combo(shopicruit.desirable_variants, limit)
     puts shopicruit.message
     shopicruit.print_output(shopicruit.products_to_purchase)
   end
