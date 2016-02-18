@@ -33,4 +33,27 @@ describe 'Shopicruit' do
       expect(test.desirable_products). to all be_instance_of(Product)
     end
   end
+
+  describe "#find_all_desirable_variants" do
+    it "populates our instance's desirable variants" do
+      test.filter_products #products need to be populate beforehand
+      expect {test.find_all_desirable_variants}
+      .to change {test.desirable_variants.empty?}
+      .from(true).to(false)
+    end
+
+    it "associates each variant to its parent product" do
+      test.filter_products
+      test.find_all_desirable_variants
+      expect(test.desirable_variants). to all satisfy { |variant|
+        variant.parent.type == "Wallet"
+      }
+    end
+
+    it "populates instance's desirable variants with Variant objects" do
+      test.filter_products
+      test.find_all_desirable_variants
+      expect(test.desirable_variants). to all be_instance_of(Variant)
+    end
+  end
 end
