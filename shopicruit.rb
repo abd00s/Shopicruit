@@ -22,12 +22,18 @@ class Shopicruit
     shopicruit.find_all_desirable_variants
     shopicruit.find_carriable_combo(shopicruit.desirable_variants, shopicruit.limit)
     puts shopicruit.message
-    shopicruit.products_to_purchase.each do |product|
-      puts "\t#{product.parent.title}"
-      puts "\t\t#{product.title}"
+    shopicruit.print_output(shopicruit.products_to_purchase)
+  end
+
+  def print_output(products_to_purchase)
+    if products_to_purchase.count > 0
+      products_to_purchase.each do |product|
+        puts "\t#{product.parent.title}"
+        puts "\t\t#{product.title}"
+      end
+      puts "Weighing #{(weight_of_variants(products_to_purchase))} KGs"
+      puts "Costing you $#{price_of_variants(products_to_purchase)}"
     end
-    puts "Weighing #{(shopicruit.weight_of_variants(shopicruit.products_to_purchase))} KGs"
-    puts "Costing you $#{shopicruit.price_of_variants(shopicruit.products_to_purchase)}"
   end
 
   def filter_products
