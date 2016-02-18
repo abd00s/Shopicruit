@@ -90,7 +90,9 @@ class Shopicruit
     items.combination(i).select {|comb| weight_of_variants(comb) <= limit}
   end
 
-  def self.run(limit, desired_categories)
+  def self.run(args={})
+    limit = args[:limit] || 100000
+    desired_categories = args[:desired_categories] || ["Computer", "Keyboard"]
     shopicruit = Shopicruit.new(limit, desired_categories)
     shopicruit.filter_products
     shopicruit.find_all_desirable_variants
@@ -106,4 +108,4 @@ class Shopicruit
 
 end
 
-Shopicruit.run(100000, ["Computer", "Keyboard"])
+Shopicruit.run(limit: 100000, desired_categories: ["Computer", "Keyboard"])
