@@ -16,7 +16,7 @@ describe 'Shopicruit' do
   end
 
   describe "#filter_products" do
-    it "populates our instance's desirable products" do
+    it "populates our instance's @desirable_products" do
       expect {test.filter_products}.to change {test.desirable_products.empty?}
       .from(true).to(false)
     end
@@ -28,14 +28,14 @@ describe 'Shopicruit' do
       }
     end
 
-    it "populates instance's desirable products with Product objects" do
+    it "populates instance's @desirable_products with Product objects" do
       test.filter_products
       expect(test.desirable_products). to all be_instance_of(Product)
     end
   end
 
   describe "#find_all_desirable_variants" do
-    it "populates our instance's desirable variants" do
+    it "populates our instance's @desirable_variants" do
       test.filter_products #products need to be populate beforehand
       expect {test.find_all_desirable_variants}
       .to change {test.desirable_variants.empty?}
@@ -50,7 +50,7 @@ describe 'Shopicruit' do
       }
     end
 
-    it "populates instance's desirable variants with Variant objects" do
+    it "populates instance's @desirable_variants with Variant objects" do
       test.filter_products
       test.find_all_desirable_variants
       expect(test.desirable_variants). to all be_instance_of(Variant)
