@@ -18,7 +18,8 @@ class Shopicruit
     limit = args[:limit] || 100
     desired_categories = args[:desired_categories] || ["Computer", "Keyboard"]
     shopicruit = Shopicruit.new(limit, desired_categories)
-    shopicruit.filter_products
+    all_products = Api::get_products
+    shopicruit.filter_products(all_products)
     shopicruit.find_all_desirable_variants
     shopicruit.find_carriable_combo(shopicruit.desirable_variants, limit)
     puts shopicruit.message
@@ -36,9 +37,8 @@ class Shopicruit
     end
   end
 
-  def filter_products
-    all_products = Api::get_products
-    @desirable_products = all_products.select { |product| @desired_categories
+  def filter_products(products)
+    @desirable_products = products.select { |product| @desired_categories
       .include?(product["product_type"]) }
     @desirable_products.map! { |product| Product.new(product) }
   end
