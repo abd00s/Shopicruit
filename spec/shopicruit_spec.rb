@@ -122,6 +122,14 @@ describe 'Shopicruit' do
     end
   end
 
+  describe "#price_of_variants" do
+    it "sums input variants' price"  do
+      test.filter_products(sample_products)
+      test.find_all_desirable_variants
+      expect(test.price_of_variants(test.desirable_variants)).to eq(63.0)
+    end
+  end
+
   context "-Limit is high enough to purchase all products" do
     let(:context_1) { Shopicruit.new(16,["Keyboard", "Computer"]) }
     describe "#find_carriable_combo" do
