@@ -154,7 +154,7 @@ describe 'Shopicruit' do
           if context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).size > 0
             expect(context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit))
             .to all satisfy { |comb| context_4.weight_of_variants(comb) <= context_4.limit }
-            # Uncomment to see details in output
+            ## Uncomment to see details in output
             # context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).each do |comb|
             #   combination = "("
             #   comb.each {|i| combination += "[#{i.title}, #{i.grams}]"}
@@ -223,6 +223,32 @@ describe 'Shopicruit' do
             context_4.find_all_desirable_variants
             expect(context_4.find_combinations(context_4.desirable_variants, context_4.limit).size)
             .to be > 1
+          end
+        end
+
+        describe "#select_cheapest_combination" do
+          it "out of possible purchasable combinations, selects the cheapest" do
+            context_4.filter_products(sample_products)
+            context_4.find_all_desirable_variants
+            combinations = context_4.find_combinations(context_4.desirable_variants, context_4.limit)
+            price_of_combinations = Hash.new
+            combinations.each_with_index {|c, i| price_of_combinations["combination #{i+1}"] = context_4.price_of_variants(c)}
+            minimmum_price = price_of_combinations.values.min
+            selected_combination = context_4.select_cheapest_combination(combinations)
+
+            ## Uncomment to see details in output
+            # combinations.each do |comb|
+            #   combination = "("
+            #   comb.each {|i| combination += "[#{i.title}, #{i.grams}, $#{i.price}]"}
+            #   combination << ")"
+            #   puts "\t\t"+combination
+            #   puts "\t\tTotal weight of this combination is #{context_4.weight_of_variants(comb)}; which is within the limit #{context_4.limit}"
+            #   puts "\t\tTotal price of this combination is $#{context_4.price_of_variants(comb)}"
+            #   puts
+            # end
+
+            expect(context_4.price_of_variants(selected_combination))
+            .to eq(minimmum_price)
           end
         end
       end
