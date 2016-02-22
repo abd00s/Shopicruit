@@ -141,6 +141,33 @@ describe 'Shopicruit' do
       end
     end
   end
+
+  context "Limit is low, can purchase some products or none." do
+    let(:context_2) { Shopicruit.new(0.5,["Keyboard", "Computer"]) }
+    let(:context_3) { Shopicruit.new(6,["Keyboard", "Computer"]) }
+    let(:context_4) { Shopicruit.new(7,["Keyboard", "Computer"]) }
+    describe  "#acceptable_combinations_of_size_i" do
+      it "finds combinations (subsets/groupings) of input variants that are within the limit" do
+        context_4.filter_products(sample_products)
+        context_4.find_all_desirable_variants
+        context_4.desirable_variants.count.downto(1) do |i|
+          if context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).size > 0
+            expect(context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit))
+            .to all satisfy { |comb| context_4.weight_of_variants(comb) <= context_4.limit }
+            # Uncomment to see details in output
+            # context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).each do |comb|
+            #   combination = "("
+            #   comb.each {|i| combination += "[#{i.title}, #{i.grams}]"}
+            #   combination << ")"
+            #   puts "\t"+combination
+            #   puts "\tTotal weight of this combination is #{context_4.weight_of_variants(comb)}; which is within the limit #{context_4.limit}"
+            #   puts
+            # end
+          end
+        end
+      end
+    end
+  end
 end
 
 
