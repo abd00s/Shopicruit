@@ -80,14 +80,14 @@ describe 'Shopicruit' do
 
     it "only selects products matching our required categories" do
       test.filter_products(sample_products)
-      expect(test.desirable_products). to all satisfy { |product|
+      expect(test.desirable_products).to all satisfy { |product|
         product.type == "Computer" || product.type == "Keyboard"
       }
     end
 
     it "populates instance's @desirable_products with Product objects" do
       test.filter_products(sample_products)
-      expect(test.desirable_products). to all be_instance_of(Product)
+      expect(test.desirable_products).to all be_instance_of(Product)
     end
   end
 
@@ -102,7 +102,7 @@ describe 'Shopicruit' do
     it "associates each variant to its parent product" do
       test.filter_products(sample_products)
       test.find_all_desirable_variants
-      expect(test.desirable_variants). to all satisfy { |variant|
+      expect(test.desirable_variants).to all satisfy { |variant|
         variant.parent.type == "Computer" || variant.parent.type == "Keyboard"
       }
     end
@@ -110,7 +110,15 @@ describe 'Shopicruit' do
     it "populates instance's @desirable_variants with Variant objects" do
       test.filter_products(sample_products)
       test.find_all_desirable_variants
-      expect(test.desirable_variants). to all be_instance_of(Variant)
+      expect(test.desirable_variants).to all be_instance_of(Variant)
+    end
+  end
+
+  describe "#weight_of_variants" do
+    it "sums input variants' weight"  do
+      test.filter_products(sample_products)
+      test.find_all_desirable_variants
+      expect(test.weight_of_variants(test.desirable_variants)).to eq(15.0)
     end
   end
 end
