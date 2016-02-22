@@ -184,13 +184,33 @@ describe 'Shopicruit' do
           .to_not change {context_2.products_to_purchase.count}
         end
 
-      it "updates output @message to \"All variants are too heavy, you can't purchase any.\"" do
-        context_2.filter_products(sample_products)
-        context_2.find_all_desirable_variants
-        expect {context_2.find_carriable_combo(context_2.desirable_variants, context_2.limit)}
-        .to change {context_2.message}
-        .from([]).to("All variants are too heavy, you can't purchase any.")
+        it "updates output @message to \"All variants are too heavy, you can't purchase any.\"" do
+          context_2.filter_products(sample_products)
+          context_2.find_all_desirable_variants
+          expect {context_2.find_carriable_combo(context_2.desirable_variants, context_2.limit)}
+          .to change {context_2.message}
+          .from([]).to("All variants are too heavy, you can't purchase any.")
+        end
       end
+    end
+
+    context "Limit allows purchase of some products, but not all" do
+      describe "#find_carriable_combo" do
+        it "updates output @message to \"This selection of variants is the most you can carry while remaining under the limit\"" do
+          context_3.filter_products(sample_products)
+          context_3.find_all_desirable_variants
+          expect {context_3.find_carriable_combo(context_3.desirable_variants, context_3.limit)}
+          .to change {context_3.message}
+          .from([]).to("This selection of variants is the most you can carry while remaining under the limit")
+        end
+      end
+
+      context "Produces one purchasable combination" do
+
+      end
+
+      context "Produces multiple purchasable combinations" do
+
       end
     end
   end
