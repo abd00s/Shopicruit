@@ -167,6 +167,17 @@ describe 'Shopicruit' do
         end
       end
     end
+
+    context "Limit is too low, can't purchase any product" do
+      describe "#find_combinations" do
+        it "returns an empty array (of products) because they're each individually too heavy" do
+          context_2.filter_products(sample_products)
+          context_2.find_all_desirable_variants
+          expect(context_2.find_combinations(context_2.desirable_variants,context_2.limit))
+          .to eq([])
+        end
+      end
+    end
   end
 end
 
