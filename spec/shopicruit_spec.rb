@@ -121,4 +121,44 @@ describe 'Shopicruit' do
       expect(test.weight_of_variants(test.desirable_variants)).to eq(15.0)
     end
   end
+
+  context "Limit is high enough to purchase all products" do
+    let(:context_1) { Shopicruit.new(16,["Keyboard", "Computer"]) }
+    describe "#find_carriable_combo" do
+      it "adds all filtered products to @products_to_purchase" do
+        context_1.filter_products(sample_products)
+        context_1.find_all_desirable_variants
+        expect {context_1.find_carriable_combo(context_1.desirable_variants, context_1.limit)}
+        .to change {context_1.products_to_purchase.count}.from(0).to(5)
+      end
+
+      it "updates output @message to \"The total weight of all desired variants is under the weight limit you may purchase all.\"" do
+        context_1.filter_products(sample_products)
+        context_1.find_all_desirable_variants
+        expect {context_1.find_carriable_combo(context_1.desirable_variants, context_1.limit)}
+        .to change {context_1.message}
+        .from([]).to("The total weight of all desired variants is under the weight limit you may purchase all.")
+      end
+    end
+  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
