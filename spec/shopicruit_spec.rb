@@ -177,6 +177,21 @@ describe 'Shopicruit' do
           .to eq([])
         end
       end
+
+      describe "#find_carriable_combo" do
+        it "does not add any product to @products_to_purchase" do
+          expect {context_2.find_carriable_combo(context_2.desirable_variants, context_2.limit)}
+          .to_not change {context_2.products_to_purchase.count}
+        end
+
+      it "updates output @message to \"All variants are too heavy, you can't purchase any.\"" do
+        context_2.filter_products(sample_products)
+        context_2.find_all_desirable_variants
+        expect {context_2.find_carriable_combo(context_2.desirable_variants, context_2.limit)}
+        .to change {context_2.message}
+        .from([]).to("All variants are too heavy, you can't purchase any.")
+      end
+      end
     end
   end
 end
