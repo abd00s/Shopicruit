@@ -122,7 +122,7 @@ describe 'Shopicruit' do
     end
   end
 
-  context "Limit is high enough to purchase all products" do
+  context "-Limit is high enough to purchase all products" do
     let(:context_1) { Shopicruit.new(16,["Keyboard", "Computer"]) }
     describe "#find_carriable_combo" do
       it "adds all filtered products to @products_to_purchase" do
@@ -142,7 +142,7 @@ describe 'Shopicruit' do
     end
   end
 
-  context "Limit is low, can purchase some products or none." do
+  context "-Limit is low, can purchase some products or none." do
     let(:context_2) { Shopicruit.new(0.5,["Keyboard", "Computer"]) }
     let(:context_3) { Shopicruit.new(6,["Keyboard", "Computer"]) }
     let(:context_4) { Shopicruit.new(7,["Keyboard", "Computer"]) }
@@ -168,7 +168,7 @@ describe 'Shopicruit' do
       end
     end
 
-    context "Limit is too low, can't purchase any product" do
+    context "--Limit is too low, can't purchase any product" do
       describe "#find_combinations" do
         it "returns an empty array (of products) because they're each individually too heavy" do
           context_2.filter_products(sample_products)
@@ -194,7 +194,7 @@ describe 'Shopicruit' do
       end
     end
 
-    context "Limit allows purchase of some products, but not all" do
+    context "--Limit allows purchase of some products, but not all" do
       describe "#find_carriable_combo" do
         it "updates output @message to \"This selection of variants is the most you can carry while remaining under the limit\"" do
           context_3.filter_products(sample_products)
@@ -205,12 +205,26 @@ describe 'Shopicruit' do
         end
       end
 
-      context "Produces one purchasable combination" do
-
+      context "---Produces one purchasable combination" do
+        describe "#find_combinations" do
+          it "returns `only` one selection of purchasable products" do
+            context_3.filter_products(sample_products)
+            context_3.find_all_desirable_variants
+            expect(context_3.find_combinations(context_3.desirable_variants, context_3.limit).size)
+            .to eq(1)
+          end
+        end
       end
 
-      context "Produces multiple purchasable combinations" do
-
+      context "---Produces multiple purchasable combinations" do
+        describe "#find_combinations" do
+          it "returns all combinations of purchasable products" do
+            context_4.filter_products(sample_products)
+            context_4.find_all_desirable_variants
+            expect(context_4.find_combinations(context_4.desirable_variants, context_4.limit).size)
+            .to be > 1
+          end
+        end
       end
     end
   end
