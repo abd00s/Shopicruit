@@ -13,6 +13,7 @@ describe 'Shopicruit' do
   let(:context_2) { Shopicruit.new(0.5,["Keyboard", "Computer"]) }
   let(:context_3) { Shopicruit.new(6,["Keyboard", "Computer"]) }
   let(:context_4) { Shopicruit.new(7,["Keyboard", "Computer"]) }
+
   let(:sample_products) {[
     {
       "title" => "Sample Product 1",
@@ -142,80 +143,86 @@ describe 'Shopicruit' do
   end
 
   context "-Case 1: Limit is high enough to purchase all products" do
+    let(:scenario) { context_1 }
     describe "#find_carriable_combo" do
       it "adds all filtered products to @products_to_purchase" do
-        context_1.filter_products(sample_products)
-        context_1.find_all_desirable_variants
-        expect {context_1.find_carriable_combo(context_1.desirable_variants, context_1.limit)}
-        .to change {context_1.products_to_purchase.count}.from(0).to(5)
+        scenario.filter_products(sample_products)
+        scenario.find_all_desirable_variants
+        expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
+        .to change {scenario.products_to_purchase.count}.from(0).to(5)
       end
 
       it "updates output @message to \"The total weight of all desired variants is under the weight limit you may purchase all.\"" do
-        context_1.filter_products(sample_products)
-        context_1.find_all_desirable_variants
-        expect {context_1.find_carriable_combo(context_1.desirable_variants, context_1.limit)}
-        .to change {context_1.message}
+        scenario.filter_products(sample_products)
+        scenario.find_all_desirable_variants
+        expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
+        .to change {scenario.message}
         .from([]).to("The total weight of all desired variants is under the weight limit you may purchase all.")
       end
     end
   end
 
   context "-Case 2: Limit is low, can purchase some products or none." do
+    let(:scenario) { context_4 }
     describe  "#acceptable_combinations_of_size_i" do
       it "finds combinations (subsets/groupings) of input variants that are within the limit" do
-        context_4.filter_products(sample_products)
-        context_4.find_all_desirable_variants
-        context_4.desirable_variants.count.downto(1) do |i|
-          if context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).size > 0
-            expect(context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit))
-            .to all satisfy { |comb| context_4.weight_of_variants(comb) <= context_4.limit }
+        scenario.filter_products(sample_products)
+        scenario.find_all_desirable_variants
+        scenario.desirable_variants.count.downto(1) do |i|
+          if scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit).size > 0
+            expect(scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit))
+            .to all satisfy { |comb| scenario.weight_of_variants(comb) <= scenario.limit }
+
             # # Uncomment to see details in output
-            # context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).each do |comb|
+            # scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit).each do |comb|
             #   combination = "("
             #   comb.each {|i| combination += "[#{i.title}, #{i.weight} KG]"}
             #   combination << ")"
             #   puts "\t"+combination
-            #   puts "\tTotal weight of this combination is #{context_4.weight_of_variants(comb)} KG; which is within the limit of #{context_4.limit} KG"
+            #   puts "\tTotal weight of this combination is #{scenario.weight_of_variants(comb)} KG; which is within the limit of #{scenario.limit} KG"
             #   puts
             # end
+
           end
         end
       end
     end
 
     context "--Case 2(a): Limit is too low, can't purchase any product" do
+      let(:scenario) { context_2 }
       describe "#find_combinations" do
         it "returns an empty array (of products) because they're each individually too heavy" do
-          context_2.filter_products(sample_products)
-          context_2.find_all_desirable_variants
-          expect(context_2.find_combinations(context_2.desirable_variants,context_2.limit))
+          scenario.filter_products(sample_products)
+          scenario.find_all_desirable_variants
+          expect(scenario.find_combinations(scenario.desirable_variants,scenario.limit))
           .to eq([])
         end
       end
 
       describe "#find_carriable_combo" do
         it "does not add any product to @products_to_purchase" do
-          expect {context_2.find_carriable_combo(context_2.desirable_variants, context_2.limit)}
-          .to_not change {context_2.products_to_purchase.count}
+          expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
+          .to_not change {scenario.products_to_purchase.count}
         end
 
         it "updates output @message to \"All variants are too heavy, you can't purchase any.\"" do
-          context_2.filter_products(sample_products)
-          context_2.find_all_desirable_variants
-          expect {context_2.find_carriable_combo(context_2.desirable_variants, context_2.limit)}
-          .to change {context_2.message}
+          scenario.filter_products(sample_products)
+          scenario.find_all_desirable_variants
+          expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
+          .to change {scenario.message}
           .from([]).to("All variants are too heavy, you can't purchase any.")
         end
       end
     end
 
     context "--Case 2(b): Limit allows purchase of some products, but not all" do
+      let(:scenario) { context_3 }
       describe "#find_carriable_combo" do
         it "updates output @message to \"This selection of variants is the most you can carry while remaining under the limit\"" do
-          context_3.filter_products(sample_products)
-          context_3.find_all_desirable_variants
-          expect {context_3.find_carriable_combo(context_3.desirable_variants, context_3.limit)}
-          .to change {context_3.message}
+          scenario.filter_products(sample_products)
+          scenario.find_all_desirable_variants
+          expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
+          .to change {scenario.message}
           .from([]).to("This selection of variants is the most you can carry while remaining under the limit")
         end
       end
@@ -223,33 +230,34 @@ describe 'Shopicruit' do
       context "---Case 2(b)(i): Produces one purchasable combination" do
         describe "#find_combinations" do
           it "returns `only` one selection of purchasable products" do
-            context_3.filter_products(sample_products)
-            context_3.find_all_desirable_variants
-            expect(context_3.find_combinations(context_3.desirable_variants, context_3.limit).size)
+            scenario.filter_products(sample_products)
+            scenario.find_all_desirable_variants
+            expect(scenario.find_combinations(scenario.desirable_variants, scenario.limit).size)
             .to eq(1)
           end
         end
       end
 
       context "---Case 2(b)(ii): Produces multiple purchasable combinations" do
+        let(:scenario) { context_4 }
         describe "#find_combinations" do
           it "returns all combinations of purchasable products" do
-            context_4.filter_products(sample_products)
-            context_4.find_all_desirable_variants
-            expect(context_4.find_combinations(context_4.desirable_variants, context_4.limit).size)
+            scenario.filter_products(sample_products)
+            scenario.find_all_desirable_variants
+            expect(scenario.find_combinations(scenario.desirable_variants, scenario.limit).size)
             .to be > 1
           end
         end
 
         describe "#select_cheapest_combination" do
           it "out of possible purchasable combinations, selects the cheapest" do
-            context_4.filter_products(sample_products)
-            context_4.find_all_desirable_variants
-            combinations = context_4.find_combinations(context_4.desirable_variants, context_4.limit)
+            scenario.filter_products(sample_products)
+            scenario.find_all_desirable_variants
+            combinations = scenario.find_combinations(scenario.desirable_variants, scenario.limit)
             price_of_combinations = Hash.new
-            combinations.each_with_index {|c, i| price_of_combinations["combination #{i+1}"] = context_4.price_of_variants(c)}
+            combinations.each_with_index {|c, i| price_of_combinations["combination #{i+1}"] = scenario.price_of_variants(c)}
             minimmum_price = price_of_combinations.values.min
-            selected_combination = context_4.select_cheapest_combination(combinations)
+            selected_combination = scenario.select_cheapest_combination(combinations)
 
             # # Uncomment to see details in output
             # combinations.each do |comb|
@@ -257,12 +265,12 @@ describe 'Shopicruit' do
             #   comb.each {|i| combination += "[#{i.title}, #{i.weight} KG, $#{i.price}]"}
             #   combination << ")"
             #   puts "\t\t"+combination
-            #   puts "\t\tTotal weight of this combination is #{context_4.weight_of_variants(comb)} KG; which is within the limit of #{context_4.limit} KG"
-            #   puts "\t\tTotal price of this combination is $#{context_4.price_of_variants(comb)}"
+            #   puts "\t\tTotal weight of this combination is #{scenario.weight_of_variants(comb)} KG; which is within the limit of #{scenario.limit} KG"
+            #   puts "\t\tTotal price of this combination is $#{scenario.price_of_variants(comb)}"
             #   puts
             # end
 
-            expect(context_4.price_of_variants(selected_combination))
+            expect(scenario.price_of_variants(selected_combination))
             .to eq(minimmum_price)
           end
         end
