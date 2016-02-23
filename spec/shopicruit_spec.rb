@@ -72,8 +72,15 @@ describe 'Shopicruit' do
 
   let(:scenario) { context_1 }
 
+  before do |example|
+    unless example.metadata[:skip_before]
+      scenario.filter_products(sample_products)
+      scenario.find_all_desirable_variants
+    end
+  end
+
   describe '#initialize' do
-    it 'instantiates Shopicruit with initial state' do
+    it 'instantiates Shopicruit with initial state', :skip_before do
       expect(scenario).to have_attributes(
         limit: 16,
         desired_categories: ["Keyboard", "Computer"],
@@ -86,26 +93,26 @@ describe 'Shopicruit' do
   end
 
   describe "#filter_products" do
-    it "populates our instance's @desirable_products" do
+    it "populates our instance's @desirable_products", :skip_before do
       expect {scenario.filter_products(sample_products)}.to change {scenario.desirable_products.empty?}
       .from(true).to(false)
     end
 
-    it "only selects products matching our required categories" do
+    it "only selects products matching our required categories", :skip_before do
       scenario.filter_products(sample_products)
       expect(scenario.desirable_products).to all satisfy { |product|
         product.type == "Computer" || product.type == "Keyboard"
       }
     end
 
-    it "populates instance's @desirable_products with Product objects" do
+    it "populates instance's @desirable_products with Product objects", :skip_before do
       scenario.filter_products(sample_products)
       expect(scenario.desirable_products).to all be_instance_of(Product)
     end
   end
 
   describe "#find_all_desirable_variants" do
-    it "populates our instance's @desirable_variants" do
+    it "populates our instance's @desirable_variants", :skip_before do
       scenario.filter_products(sample_products) #products need to be populate beforehand
       expect {scenario.find_all_desirable_variants}
       .to change {scenario.desirable_variants.empty?}
@@ -113,32 +120,24 @@ describe 'Shopicruit' do
     end
 
     it "associates each variant to its parent product" do
-      scenario.filter_products(sample_products)
-      scenario.find_all_desirable_variants
       expect(scenario.desirable_variants).to all satisfy { |variant|
         variant.parent.type == "Computer" || variant.parent.type == "Keyboard"
       }
     end
 
     it "populates instance's @desirable_variants with Variant objects" do
-      scenario.filter_products(sample_products)
-      scenario.find_all_desirable_variants
       expect(scenario.desirable_variants).to all be_instance_of(Variant)
     end
   end
 
   describe "#weight_of_variants" do
     it "sums input variants' weight"  do
-      scenario.filter_products(sample_products)
-      scenario.find_all_desirable_variants
       expect(scenario.weight_of_variants(scenario.desirable_variants)).to eq(15.0)
     end
   end
 
   describe "#price_of_variants" do
     it "sums input variants' price"  do
-      scenario.filter_products(sample_products)
-      scenario.find_all_desirable_variants
       expect(scenario.price_of_variants(scenario.desirable_variants)).to eq(63.0)
     end
   end
@@ -147,15 +146,11 @@ describe 'Shopicruit' do
     let(:scenario) { context_1 }
     describe "#find_carriable_combo" do
       it "adds all filtered products to @products_to_purchase" do
-        scenario.filter_products(sample_products)
-        scenario.find_all_desirable_variants
         expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
         .to change {scenario.products_to_purchase.count}.from(0).to(5)
       end
 
       it "updates output @message to \"The total weight of all desired variants is under the weight limit you may purchase all.\"" do
-        scenario.filter_products(sample_products)
-        scenario.find_all_desirable_variants
         expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
         .to change {scenario.message}
         .from([]).to("The total weight of all desired variants is under the weight limit you may purchase all.")
@@ -167,8 +162,6 @@ describe 'Shopicruit' do
     let(:scenario) { context_4 }
     describe  "#acceptable_combinations_of_size_i" do
       it "finds combinations (subsets/groupings) of input variants that are within the limit" do
-        scenario.filter_products(sample_products)
-        scenario.find_all_desirable_variants
         scenario.desirable_variants.count.downto(1) do |i|
           if scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit).size > 0
             expect(scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit))
@@ -193,8 +186,6 @@ describe 'Shopicruit' do
       let(:scenario) { context_2 }
       describe "#find_combinations" do
         it "returns an empty array (of products) because they're each individually too heavy" do
-          scenario.filter_products(sample_products)
-          scenario.find_all_desirable_variants
           expect(scenario.find_combinations(scenario.desirable_variants,scenario.limit))
           .to eq([])
         end
@@ -207,8 +198,6 @@ describe 'Shopicruit' do
         end
 
         it "updates output @message to \"All variants are too heavy, you can't purchase any.\"" do
-          scenario.filter_products(sample_products)
-          scenario.find_all_desirable_variants
           expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
           .to change {scenario.message}
           .from([]).to("All variants are too heavy, you can't purchase any.")
@@ -220,8 +209,6 @@ describe 'Shopicruit' do
       let(:scenario) { context_3 }
       describe "#find_carriable_combo" do
         it "updates output @message to \"This selection of variants is the most you can carry while remaining under the limit\"" do
-          scenario.filter_products(sample_products)
-          scenario.find_all_desirable_variants
           expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
           .to change {scenario.message}
           .from([]).to("This selection of variants is the most you can carry while remaining under the limit")
@@ -231,8 +218,6 @@ describe 'Shopicruit' do
       context "---Case 2(b)(i): Produces one purchasable combination" do
         describe "#find_combinations" do
           it "returns `only` one selection of purchasable products" do
-            scenario.filter_products(sample_products)
-            scenario.find_all_desirable_variants
             expect(scenario.find_combinations(scenario.desirable_variants, scenario.limit).size)
             .to eq(1)
           end
@@ -243,8 +228,6 @@ describe 'Shopicruit' do
         let(:scenario) { context_4 }
         describe "#find_combinations" do
           it "returns all combinations of purchasable products" do
-            scenario.filter_products(sample_products)
-            scenario.find_all_desirable_variants
             expect(scenario.find_combinations(scenario.desirable_variants, scenario.limit).size)
             .to be > 1
           end
@@ -252,8 +235,6 @@ describe 'Shopicruit' do
 
         describe "#select_cheapest_combination" do
           it "out of possible purchasable combinations, selects the cheapest" do
-            scenario.filter_products(sample_products)
-            scenario.find_all_desirable_variants
             combinations = scenario.find_combinations(scenario.desirable_variants, scenario.limit)
             price_of_combinations = Hash.new
             combinations.each_with_index {|c, i| price_of_combinations["combination #{i+1}"] = scenario.price_of_variants(c)}
