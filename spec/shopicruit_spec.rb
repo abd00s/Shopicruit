@@ -162,13 +162,13 @@ describe 'Shopicruit' do
           if context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).size > 0
             expect(context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit))
             .to all satisfy { |comb| context_4.weight_of_variants(comb) <= context_4.limit }
-            ## Uncomment to see details in output
+            # # Uncomment to see details in output
             # context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).each do |comb|
             #   combination = "("
-            #   comb.each {|i| combination += "[#{i.title}, #{i.weight}]"}
+            #   comb.each {|i| combination += "[#{i.title}, #{i.weight} KG]"}
             #   combination << ")"
             #   puts "\t"+combination
-            #   puts "\tTotal weight of this combination is #{context_4.weight_of_variants(comb)}; which is within the limit #{context_4.limit}"
+            #   puts "\tTotal weight of this combination is #{context_4.weight_of_variants(comb)} KG; which is within the limit of #{context_4.limit} KG"
             #   puts
             # end
           end
@@ -244,13 +244,13 @@ describe 'Shopicruit' do
             minimmum_price = price_of_combinations.values.min
             selected_combination = context_4.select_cheapest_combination(combinations)
 
-            ## Uncomment to see details in output
+            # # Uncomment to see details in output
             # combinations.each do |comb|
             #   combination = "("
-            #   comb.each {|i| combination += "[#{i.title}, #{i.weight}, $#{i.price}]"}
+            #   comb.each {|i| combination += "[#{i.title}, #{i.weight} KG, $#{i.price}]"}
             #   combination << ")"
             #   puts "\t\t"+combination
-            #   puts "\t\tTotal weight of this combination is #{context_4.weight_of_variants(comb)}; which is within the limit #{context_4.limit}"
+            #   puts "\t\tTotal weight of this combination is #{context_4.weight_of_variants(comb)} KG; which is within the limit of #{context_4.limit} KG"
             #   puts "\t\tTotal price of this combination is $#{context_4.price_of_variants(comb)}"
             #   puts
             # end
