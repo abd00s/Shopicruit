@@ -130,7 +130,7 @@ describe 'Shopicruit' do
     end
   end
 
-  context "-Limit is high enough to purchase all products" do
+  context "-Case 1: Limit is high enough to purchase all products" do
     let(:context_1) { Shopicruit.new(16,["Keyboard", "Computer"]) }
     describe "#find_carriable_combo" do
       it "adds all filtered products to @products_to_purchase" do
@@ -150,7 +150,7 @@ describe 'Shopicruit' do
     end
   end
 
-  context "-Limit is low, can purchase some products or none." do
+  context "-Case 2: Limit is low, can purchase some products or none." do
     let(:context_2) { Shopicruit.new(0.5,["Keyboard", "Computer"]) }
     let(:context_3) { Shopicruit.new(6,["Keyboard", "Computer"]) }
     let(:context_4) { Shopicruit.new(7,["Keyboard", "Computer"]) }
@@ -176,7 +176,7 @@ describe 'Shopicruit' do
       end
     end
 
-    context "--Limit is too low, can't purchase any product" do
+    context "--Case 2(a): Limit is too low, can't purchase any product" do
       describe "#find_combinations" do
         it "returns an empty array (of products) because they're each individually too heavy" do
           context_2.filter_products(sample_products)
@@ -202,7 +202,7 @@ describe 'Shopicruit' do
       end
     end
 
-    context "--Limit allows purchase of some products, but not all" do
+    context "--Case 2(b): Limit allows purchase of some products, but not all" do
       describe "#find_carriable_combo" do
         it "updates output @message to \"This selection of variants is the most you can carry while remaining under the limit\"" do
           context_3.filter_products(sample_products)
@@ -213,7 +213,7 @@ describe 'Shopicruit' do
         end
       end
 
-      context "---Produces one purchasable combination" do
+      context "---Case 2(b)(i): Produces one purchasable combination" do
         describe "#find_combinations" do
           it "returns `only` one selection of purchasable products" do
             context_3.filter_products(sample_products)
@@ -224,7 +224,7 @@ describe 'Shopicruit' do
         end
       end
 
-      context "---Produces multiple purchasable combinations" do
+      context "---Case 2(b)(ii): Produces multiple purchasable combinations" do
         describe "#find_combinations" do
           it "returns all combinations of purchasable products" do
             context_4.filter_products(sample_products)
@@ -263,23 +263,3 @@ describe 'Shopicruit' do
     end
   end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
