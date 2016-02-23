@@ -70,14 +70,15 @@ describe 'Shopicruit' do
     }
   ]}
 
-  let(:scenario) { context_1 }
-
+  # Before hook to populate @desirable_products and @desirable_variants
   before do |example|
     unless example.metadata[:skip_before]
       scenario.filter_products(sample_products)
       scenario.find_all_desirable_variants
     end
   end
+
+  let(:scenario) { context_1 }
 
   describe '#initialize' do
     it 'instantiates Shopicruit with initial state', :skip_before do
@@ -113,7 +114,7 @@ describe 'Shopicruit' do
 
   describe "#find_all_desirable_variants" do
     it "populates our instance's @desirable_variants", :skip_before do
-      scenario.filter_products(sample_products) #products need to be populate beforehand
+      scenario.filter_products(sample_products) #products need to be populated beforehand
       expect {scenario.find_all_desirable_variants}
       .to change {scenario.desirable_variants.empty?}
       .from(true).to(false)
@@ -144,6 +145,7 @@ describe 'Shopicruit' do
 
   context "-Case 1: Limit is high enough to purchase all products" do
     let(:scenario) { context_1 }
+
     describe "#find_carriable_combo" do
       it "adds all filtered products to @products_to_purchase" do
         expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
@@ -160,6 +162,7 @@ describe 'Shopicruit' do
 
   context "-Case 2: Limit is low, can purchase some products or none." do
     let(:scenario) { context_4 }
+
     describe  "#acceptable_combinations_of_size_i" do
       it "finds combinations (subsets/groupings) of input variants that are within the limit" do
         scenario.desirable_variants.count.downto(1) do |i|
@@ -184,6 +187,7 @@ describe 'Shopicruit' do
 
     context "--Case 2(a): Limit is too low, can't purchase any product" do
       let(:scenario) { context_2 }
+
       describe "#find_combinations" do
         it "returns an empty array (of products) because they're each individually too heavy" do
           expect(scenario.find_combinations(scenario.desirable_variants,scenario.limit))
@@ -207,6 +211,7 @@ describe 'Shopicruit' do
 
     context "--Case 2(b): Limit allows purchase of some products, but not all" do
       let(:scenario) { context_3 }
+
       describe "#find_carriable_combo" do
         it "updates output @message to \"This selection of variants is the most you can carry while remaining under the limit\"" do
           expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
@@ -226,6 +231,7 @@ describe 'Shopicruit' do
 
       context "---Case 2(b)(ii): Produces multiple purchasable combinations" do
         let(:scenario) { context_4 }
+
         describe "#find_combinations" do
           it "returns all combinations of purchasable products" do
             expect(scenario.find_combinations(scenario.desirable_variants, scenario.limit).size)
