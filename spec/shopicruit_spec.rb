@@ -1,7 +1,6 @@
 require  "./shopicruit"
 
 describe 'Shopicruit' do
-  let(:test) {Shopicruit.new(100,["Keyboard", "Computer"])}
   # Possible Scenarios
   # Case 1: Limit is high enough to purchase all products (context_1)
   # Case 2: Limit is low, can purchase some products or none.
@@ -71,10 +70,12 @@ describe 'Shopicruit' do
     }
   ]}
 
+  let(:scenario) { context_1 }
+
   describe '#initialize' do
     it 'instantiates Shopicruit with initial state' do
-      expect(test).to have_attributes(
-        limit: 100,
+      expect(scenario).to have_attributes(
+        limit: 16,
         desired_categories: ["Keyboard", "Computer"],
         desirable_products: [],
         desirable_variants: [],
@@ -86,59 +87,59 @@ describe 'Shopicruit' do
 
   describe "#filter_products" do
     it "populates our instance's @desirable_products" do
-      expect {test.filter_products(sample_products)}.to change {test.desirable_products.empty?}
+      expect {scenario.filter_products(sample_products)}.to change {scenario.desirable_products.empty?}
       .from(true).to(false)
     end
 
     it "only selects products matching our required categories" do
-      test.filter_products(sample_products)
-      expect(test.desirable_products).to all satisfy { |product|
+      scenario.filter_products(sample_products)
+      expect(scenario.desirable_products).to all satisfy { |product|
         product.type == "Computer" || product.type == "Keyboard"
       }
     end
 
     it "populates instance's @desirable_products with Product objects" do
-      test.filter_products(sample_products)
-      expect(test.desirable_products).to all be_instance_of(Product)
+      scenario.filter_products(sample_products)
+      expect(scenario.desirable_products).to all be_instance_of(Product)
     end
   end
 
   describe "#find_all_desirable_variants" do
     it "populates our instance's @desirable_variants" do
-      test.filter_products(sample_products) #products need to be populate beforehand
-      expect {test.find_all_desirable_variants}
-      .to change {test.desirable_variants.empty?}
+      scenario.filter_products(sample_products) #products need to be populate beforehand
+      expect {scenario.find_all_desirable_variants}
+      .to change {scenario.desirable_variants.empty?}
       .from(true).to(false)
     end
 
     it "associates each variant to its parent product" do
-      test.filter_products(sample_products)
-      test.find_all_desirable_variants
-      expect(test.desirable_variants).to all satisfy { |variant|
+      scenario.filter_products(sample_products)
+      scenario.find_all_desirable_variants
+      expect(scenario.desirable_variants).to all satisfy { |variant|
         variant.parent.type == "Computer" || variant.parent.type == "Keyboard"
       }
     end
 
     it "populates instance's @desirable_variants with Variant objects" do
-      test.filter_products(sample_products)
-      test.find_all_desirable_variants
-      expect(test.desirable_variants).to all be_instance_of(Variant)
+      scenario.filter_products(sample_products)
+      scenario.find_all_desirable_variants
+      expect(scenario.desirable_variants).to all be_instance_of(Variant)
     end
   end
 
   describe "#weight_of_variants" do
     it "sums input variants' weight"  do
-      test.filter_products(sample_products)
-      test.find_all_desirable_variants
-      expect(test.weight_of_variants(test.desirable_variants)).to eq(15.0)
+      scenario.filter_products(sample_products)
+      scenario.find_all_desirable_variants
+      expect(scenario.weight_of_variants(scenario.desirable_variants)).to eq(15.0)
     end
   end
 
   describe "#price_of_variants" do
     it "sums input variants' price"  do
-      test.filter_products(sample_products)
-      test.find_all_desirable_variants
-      expect(test.price_of_variants(test.desirable_variants)).to eq(63.0)
+      scenario.filter_products(sample_products)
+      scenario.find_all_desirable_variants
+      expect(scenario.price_of_variants(scenario.desirable_variants)).to eq(63.0)
     end
   end
 
