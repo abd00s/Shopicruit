@@ -9,4 +9,5 @@ Please run `rspec` to run the program and spec suite or the file `shopicruit.rb`
 Assumptions made:
 * All variants are available.
 * Only one count of each variant is available.
+* If more than one carriable combination (of the same size) is achievable, select the cheaper one.
 * API response structure remains as retrieved on 22/2/2016.
