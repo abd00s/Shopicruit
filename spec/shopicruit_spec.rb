@@ -2,6 +2,17 @@ require  "./shopicruit"
 
 describe 'Shopicruit' do
   let(:test) {Shopicruit.new(100,["Keyboard", "Computer"])}
+  # Possible Scenarios
+  # Case 1: Limit is high enough to purchase all products (context_1)
+  # Case 2: Limit is low, can purchase some products or none.
+  ## Case 2(a): Limit is too low, can't purchase any product (context_2)
+  ## Case 2(b): Limit allows purchase of some products, but not all
+  ### Case 2(b)(i): Produces one purchasable combination (context_3)
+  ### Case 2(b)(ii): Produces multiple purchasable combinations (context_4)
+  let(:context_1) { Shopicruit.new(16,["Keyboard", "Computer"]) }
+  let(:context_2) { Shopicruit.new(0.5,["Keyboard", "Computer"]) }
+  let(:context_3) { Shopicruit.new(6,["Keyboard", "Computer"]) }
+  let(:context_4) { Shopicruit.new(7,["Keyboard", "Computer"]) }
   let(:sample_products) {[
     {
       "title" => "Sample Product 1",
@@ -131,7 +142,6 @@ describe 'Shopicruit' do
   end
 
   context "-Case 1: Limit is high enough to purchase all products" do
-    let(:context_1) { Shopicruit.new(16,["Keyboard", "Computer"]) }
     describe "#find_carriable_combo" do
       it "adds all filtered products to @products_to_purchase" do
         context_1.filter_products(sample_products)
@@ -151,9 +161,6 @@ describe 'Shopicruit' do
   end
 
   context "-Case 2: Limit is low, can purchase some products or none." do
-    let(:context_2) { Shopicruit.new(0.5,["Keyboard", "Computer"]) }
-    let(:context_3) { Shopicruit.new(6,["Keyboard", "Computer"]) }
-    let(:context_4) { Shopicruit.new(7,["Keyboard", "Computer"]) }
     describe  "#acceptable_combinations_of_size_i" do
       it "finds combinations (subsets/groupings) of input variants that are within the limit" do
         context_4.filter_products(sample_products)
