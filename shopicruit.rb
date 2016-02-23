@@ -71,7 +71,7 @@ class Shopicruit
   end
 
   def weight_of_variants(variants)
-    variants.inject(0){ |sum, variant| sum + variant.grams }
+    variants.inject(0){ |sum, variant| sum + variant.weight }
   end
 
   def find_combinations(variants, limit)

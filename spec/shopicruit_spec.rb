@@ -165,7 +165,7 @@ describe 'Shopicruit' do
             ## Uncomment to see details in output
             # context_4.acceptable_combinations_of_size_i(context_4.desirable_variants, i, context_4.limit).each do |comb|
             #   combination = "("
-            #   comb.each {|i| combination += "[#{i.title}, #{i.grams}]"}
+            #   comb.each {|i| combination += "[#{i.title}, #{i.weight}]"}
             #   combination << ")"
             #   puts "\t"+combination
             #   puts "\tTotal weight of this combination is #{context_4.weight_of_variants(comb)}; which is within the limit #{context_4.limit}"
@@ -247,7 +247,7 @@ describe 'Shopicruit' do
             ## Uncomment to see details in output
             # combinations.each do |comb|
             #   combination = "("
-            #   comb.each {|i| combination += "[#{i.title}, #{i.grams}, $#{i.price}]"}
+            #   comb.each {|i| combination += "[#{i.title}, #{i.weight}, $#{i.price}]"}
             #   combination << ")"
             #   puts "\t\t"+combination
             #   puts "\t\tTotal weight of this combination is #{context_4.weight_of_variants(comb)}; which is within the limit #{context_4.limit}"
