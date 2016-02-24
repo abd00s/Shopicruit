@@ -11,3 +11,4 @@ Assumptions made:
 * Only one count of each variant is to be purchased (no repeats).
 * If more than one carriable combination (of the same size) is achievable, select the cheaper one.
 * API JSON response structure remains as retrieved on 22/2/2016.
+* Valid internet connection is available to successfully hit API.
