@@ -161,29 +161,6 @@ describe 'Shopicruit' do
   end
 
   context "-Case 2: Limit is low, can purchase some products or none." do
-    let(:scenario) { context_4 }
-
-    describe  "#acceptable_combinations_of_size_i" do
-      it "finds combinations (subsets/groupings) of input variants that are within the limit" do
-        scenario.desirable_variants.count.downto(1) do |i|
-          if scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit).size > 0
-            expect(scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit))
-            .to all satisfy { |comb| scenario.weight_of_variants(comb) <= scenario.limit }
-
-            # # Uncomment to see details in output
-            # scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit).each do |comb|
-            #   combination = "("
-            #   comb.each {|i| combination += "[#{i.title}, #{i.weight} KG]"}
-            #   combination << ")"
-            #   puts "\t"+combination
-            #   puts "\tTotal weight of this combination is #{scenario.weight_of_variants(comb)} KG; which is within the limit of #{scenario.limit} KG"
-            #   puts
-            # end
-
-          end
-        end
-      end
-    end
 
     context "--Case 2(a): Limit is too low, can't purchase any product" do
       let(:scenario) { context_2 }
@@ -210,7 +187,30 @@ describe 'Shopicruit' do
     end
 
     context "--Case 2(b): Limit allows purchase of some products, but not all" do
+
       let(:scenario) { context_3 }
+
+      describe  "#acceptable_combinations_of_size_i" do
+        it "finds combinations (subsets/groupings) of input variants that are within the limit" do
+          scenario.desirable_variants.count.downto(1) do |i|
+            if scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit).size > 0
+              expect(scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit))
+              .to all satisfy { |comb| scenario.weight_of_variants(comb) <= scenario.limit }
+
+              # # Uncomment to see details in output
+              # scenario.acceptable_combinations_of_size_i(scenario.desirable_variants, i, scenario.limit).each do |comb|
+              #   combination = "("
+              #   comb.each {|i| combination += "[#{i.title}, #{i.weight} KG]"}
+              #   combination << ")"
+              #   puts "\t"+combination
+              #   puts "\tTotal weight of this combination is #{scenario.weight_of_variants(comb)} KG; which is within the limit of #{scenario.limit} KG"
+              #   puts
+              # end
+
+            end
+          end
+        end
+      end
 
       describe "#find_carriable_combo" do
         it "updates output @message to \"This selection of variants is the most you can carry while remaining under the limit\"" do
@@ -253,7 +253,7 @@ describe 'Shopicruit' do
             #   comb.each {|i| combination += "[#{i.title}, #{i.weight} KG, $#{i.price}]"}
             #   combination << ")"
             #   puts "\t\t"+combination
-            #   puts "\t\tTotal weight of this combination is #{scenario.weight_of_variants(comb)} KG; which is within the limit of #{scenario.limit} KG"
+            #   puts "\t\tTotal weight of this combination of #{comb.size} products is #{scenario.weight_of_variants(comb)} KG; which is within the limit of #{scenario.limit} KG"
             #   puts "\t\tTotal price of this combination is $#{scenario.price_of_variants(comb)}"
             #   puts
             # end
