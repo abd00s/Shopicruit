@@ -19,11 +19,15 @@ class Shopicruit
     desired_categories = args[:desired_categories] || ["Computer", "Keyboard"]
     shopicruit = Shopicruit.new(limit, desired_categories)
     all_products = Api::get_products
-    shopicruit.filter_products(all_products)
-    shopicruit.find_all_desirable_variants
-    shopicruit.find_carriable_combo(shopicruit.desirable_variants, limit)
-    puts shopicruit.message
-    shopicruit.print_output(shopicruit.products_to_purchase)
+    if all_products.size > 0
+      shopicruit.filter_products(all_products)
+      shopicruit.find_all_desirable_variants
+      shopicruit.find_carriable_combo(shopicruit.desirable_variants, limit)
+      puts shopicruit.message
+      shopicruit.print_output(shopicruit.products_to_purchase)
+    else
+      puts "No products retrieved, check your internet connection"
+    end
   end
 
   def print_output(products_to_purchase)
