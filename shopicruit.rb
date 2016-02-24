@@ -95,12 +95,13 @@ class Shopicruit
   end
 
   def select_cheapest_combination(combinations)
+    # prices = [[price_of_comb_i, i], [price_of_comb_i+1, i+1], ...]
     prices = combinations.each_with_index.map do |comb, index|
       [price_of_variants(comb), index]
     end
-    cheapest_combo = prices.min
-    index = cheapest_combo[1]
-    combinations[index]
+    cheapest_combo = prices.min #  = [price_of_cheapest_combo, its index]
+    index = cheapest_combo[1]   #                  0             1
+    combinations[index] # cheapest combination of all is at this ^ index
   end
 
   def update_products_to_purchase(products, message)
