@@ -58,7 +58,7 @@ class Shopicruit
   def find_carriable_combo(variants, limit)
     if weight_of_variants(variants) <= limit
       # buy all
-      message = "The total weight of all desired variants is under the weight limit you may purchase all."
+      message = "The total weight of all desired variants is under the weight limit, you may purchase all."
       update_products_to_purchase(variants, message)
     elsif find_combinations(variants, limit).empty?
       # buy none

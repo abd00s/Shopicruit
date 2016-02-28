@@ -152,10 +152,10 @@ describe 'Shopicruit' do
         .to change {scenario.products_to_purchase.count}.from(0).to(5)
       end
 
-      it "updates output @message to \"The total weight of all desired variants is under the weight limit you may purchase all.\"" do
+      it "updates output @message to \"The total weight of all desired variants is under the weight limit, you may purchase all.\"" do
         expect {scenario.find_carriable_combo(scenario.desirable_variants, scenario.limit)}
         .to change {scenario.message}
-        .from([]).to("The total weight of all desired variants is under the weight limit you may purchase all.")
+        .from([]).to("The total weight of all desired variants is under the weight limit, you may purchase all.")
       end
     end
   end
