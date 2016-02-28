@@ -36,8 +36,8 @@ class Shopicruit
         puts "\t#{product.parent.title}"
         puts "\t\t#{product.title}"
       end
-      puts "Weighing #{(weight_of_variants(products_to_purchase))} KGs"
-      puts "Costing you $#{price_of_variants(products_to_purchase)}"
+      puts "Weighing #{sprintf('%.2f',(weight_of_variants(products_to_purchase)))} KGs"
+      puts "Costing you $#{sprintf('%.2f',price_of_variants(products_to_purchase))}"
     end
   end
 
