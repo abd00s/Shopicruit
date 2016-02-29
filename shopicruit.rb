@@ -42,8 +42,9 @@ class Shopicruit
   end
 
   def filter_products(products)
-    @desirable_products = products.select { |product| @desired_categories
-      .include?(product["product_type"]) }
+    @desirable_products = products.select do |product|
+      @desired_categories.include?(product["product_type"])
+    end
     @desirable_products.map! { |product| Product.new(product) }
   end
 
